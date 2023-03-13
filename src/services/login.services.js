@@ -10,10 +10,10 @@ const login = async (req, res) => {
             if(!user) return res.status(404).json({message: 'No user found'});
             bcrypt.compare(password, user.password).then(result => {
                 if(!result) return res.status(401).json({auth: false, token: null, message: 'Invalid password'});
-                const token = jwt.sign({id: user.id}, config.secret, {
+                const token = jwt.sign({id: user.id, user: user.name}, config.secret, {
                     expiresIn: 86400
                 });
-                res.status(200).json({auth: true, token , message: 'User logged in successfully'});
+                res.status(200).json({auth: true, token, user: user.name, money: user.money , message: 'User logged in successfully'});
 
             });
         }).catch(error => {
